@@ -1,0 +1,2 @@
+#!/bin/sh
+perl -p -i.bak -e 's/\[restrict const static (\w)+\]/[]/g' "$*"
