@@ -13,6 +13,7 @@ void ATL_dgemvN_a1_x1_bX_y1
    int i, j;
    double y0;
 
+#pragma scop
    for (i=0; i != M; i++)
    {
       #ifdef BETA0
@@ -25,4 +26,5 @@ void ATL_dgemvN_a1_x1_bX_y1
       for (j=0; j != N; j++) y0 += A[i+j*lda] * X[j];
       Y[i] = y0;
    }
+#pragma endscop
 }
