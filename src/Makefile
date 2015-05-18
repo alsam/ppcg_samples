@@ -8,3 +8,7 @@ build:
 
 profile:
 	nvprof --metrics all ./a.out
+
+isl_calls.txt:
+	gprof -A -c -z `which ppcg` > gprof7.out
+	$(shell perl -ne 'while(/\bisl_\w+/g){print "$$&\n";}' gprof7.out|sort|uniq > isl_calls.txt)
