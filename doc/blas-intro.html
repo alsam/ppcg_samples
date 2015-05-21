@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="generator" content="scholpandoc">
+  <meta name="viewport" content="width=device-width">
+  
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+</head>
+<body>
+<div class="scholmd-container">
+<div class="scholmd-main">
+<div class="scholmd-content">
+<h1 id="linear-algebra-operations-classification">Linear Algebra operations classification</h1>
+<p>Linear Algebra kernels belong either to <strong>BLAS</strong> (stands for <strong>B</strong>asic <strong>L</strong>inear <strong>A</strong>lgebra <strong>S</strong>ubprograms) - basic operations  or <strong>LAPACK</strong> (<strong>L</strong>inear <strong>A</strong>lgebra <strong>PACK</strong>age) - larger operations.</p>
+<h2 id="blas">BLAS</h2>
+<p>There are the following dense or sparse matrix operations grouped by the <b>BLAS</b> levels:</p>
+<h3 id="blas-level-1---vector-operations">BLAS Level 1 - vector operations</h3>
+<p>
+<span class="math scholmd-math-display" style="display: block;">\[
+\begin{equation}
+\label{level1}
+\boldsymbol{y} \leftarrow \alpha \boldsymbol{x} + \boldsymbol{y} \!
+\end{equation}
+\]</span>
+</p>
+<p>These operations include:</p>
+<pre><code>* DOT (inner product)
+* SUM (sum)
+* AXPBY (Scaled vector accumulation)
+* WAXPBY (Scaled vector addition) </code></pre>
+<h3 id="blas-level-2---matrix-vector-operations">BLAS Level 2 - matrix-vector operations</h3>
+<p>
+<span class="math scholmd-math-display" style="display: block;">\[
+\begin{equation}
+\label{level2}
+\boldsymbol{y} \leftarrow \alpha A \boldsymbol{x} + \beta \boldsymbol{y}, \quad \boldsymbol{y} \leftarrow \alpha A^T \boldsymbol{x} + \beta \boldsymbol{y} \!
+\end{equation}
+\]</span>
+ These operations include:</p>
+<pre><code>* GEMV (General matrix vector product)
+* GBMV (Banded matrix vector product)
+* SYMV (Symmetric matrix vector product)
+* SPMV (Symmetric matrix vector product, packed format)
+* HEMV (Hermitian matrix vector product)
+* HPMV (Hermitian matrix vector product, packed format)
+* TRSV (Triangular solve) </code></pre>
+<p>dtrsv, strsv, ztrsv and ctrsv solve one of the systems of equations 
+<span class="math scholmd-math-display" style="display: block;">\[
+\begin{equation}
+\label{level2_trsv}
+A \boldsymbol{x} = \boldsymbol{b}, \quad A^T \boldsymbol{x} = \boldsymbol{b} \!
+\end{equation}
+\]</span>
+ ### BLAS Level 3 - matrix-matrix operation 
+<span class="math scholmd-math-display" style="display: block;">\[
+\begin{equation}
+\label{level3_gemm}
+C \leftarrow \alpha A B + \beta C \
+\end{equation}
+\]</span>
+</p>
+<p>for</p>
+<pre><code>- GEMM (General matrix matrix product)
+- SYMM, HEMM (Symmetric or Hermitian matrix matrix product)
+- TRMM (triangular matrix multiply)
+- GBMM (general banded matrix multiply)</code></pre>
+<p>and</p>
+<pre><code>- SYRK, SYR2K, HERK, HER2K (symmetric or Hermitian rank-k and rank-2k updates)</code></pre>
+<h2 id="blas-calls-in-linpack">BLAS calls in Linpack</h2>
+<pre><code>* Level 1: idamax, dcopy, dscal, dswap
+    * iamax (idamax) - find index of maximum element in a vector
+    * copy (dcopy) - copy vector
+    * scal (dscal) - scale a vector by a constant
+    * swap (dswap) - swap two vectors
+
+* Level 2:
+    * DGER - ``A\leftarrow{A}+\alpha{x}y^T``
+
+* Level 3:
+    * DTRSM - solve one of the matrix equations  ``op(A)*X=\alpha*B, X*op(A) = \alpha*B``</code></pre>
+<h2 id="lapack">LAPACK</h2>
+<p>LAPACK operations include:</p>
+<pre><code>* GTSV - solve the equation ``Ax=b``, where ``A`` is a tridiagonal matrix, ``x`` and ``b`` - vectors
+* GETRF - compute an LU factorization of a general M-by-N matrix A using partial pivoting with row interchanges</code></pre>
+<h2 id="sparse-linear-algebra">Sparse Linear Algebra</h2>
+<h3 id="overview">overview</h3>
+<p>Sparse matrix-vector multiplication (SpMV) is one of the most important operation in sparse matrix computations. Iterative methods for solving large linear systems (<span class="math scholmd-math-inline">\(Ax=b\)</span>) and eigenvalue problems (<span class="math scholmd-math-inline">\(Ax = \lambda x\)</span>) require huge number of these operations.</p>
+<p>Compared to dense linear algebra kernels, sparse kernels suffer from higher instruction and storage overheads per ﬂop, as well as indirect and irregular memory access patterns. Achieving higher performance on these platforms requires choosing a compact data structure and code transformations that best exploit properties of both the sparse matrix – which may be known only at run-time – and the underlying machine architecture. This need for optimization and tuning at run-time is a major distinction from the dense case.</p>
+<p>The general form for the SpMV operation is <span class="math scholmd-math-inline">\(y \leftarrow Ax+y\)</span> where A is large and sparse and x and y are dense column vectors. There are many sparse formats for storing sparse matrices. The most popular is Compressed Sparse Row (CSR) format. The CSR format stores an <math>mn</math> sparse matrix having k non-zero elements using three one-dimensional arrays: the arrays val and col ind, each of size k, to store the non-zeros values and column indices, respectively; and an array row ptr of size m + 1 to store pointers to the ﬁrst element of each row in the val and col ind arrays. Basic reference SpMV kernel implementation for Compressed Sparse Row (CSR) matrix where: * the column indices within a given row are sorted in increasing order (i.e., the last element of each row is the diagonal non-zero value), * <span class="math scholmd-math-inline">\(x\)</span> is an array with unit-stride</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// y &lt;- y + A*x, where A is in CSR format</span>
+<span class="kw">for</span> (size_t i = <span class="dv">0</span>; i &lt; m; i++) {
+  <span class="dt">float</span> acc = y[i];
+  <span class="kw">for</span> (size_t k = ptr[i]; k &lt; ptr[i<span class="dv">+1</span>]; k++) {
+    acc = acc + val[k] * x[ind[k]];
+  }
+  y[i] = acc;
+}</code></pre>
+<p><em>Fortran 90</em> introduced vector notation, vector intrinsics such as dot product and triplet notation for vector slices, thus an equivalent code is shorter than C one:</p>
+<pre class="sourceCode fortran"><code class="sourceCode fortran"><span class="kw">DO</span> I<span class="kw">=</span><span class="dv">1</span>,M
+   K1 <span class="kw">=</span> IPTR(I)
+   K2 <span class="kw">=</span> IPTR(I<span class="kw">+</span><span class="dv">1</span>)<span class="kw">-</span><span class="dv">1</span>
+   Y(I) <span class="kw">=</span> DOTPRODUCT(VAL(K1:K2),X(IND(K1:K2)))
+<span class="kw">ENDDO</span></code></pre>
+<p>Consider the internal loop in the above C code excerpt - dot product. For single precision SpMV pumping of 12 bytes is required for processing one non-zero matrix entry (value from A, value from vector x, column index) and 2 flops (multiplication and addition - FFMA/DFMA is a natural choice). The outer loop can be very large - proportional to the number of matrix rows, internal loop workload is proportional to the number of non-zeros of this row. Thus imbalance in the number of non-zeros might lead to workload imbalance.</p>
+<p>Another interesting kernel: <em>SpTRSV</em></p>
+<p>Basic reference triangular solver kernel implementation for <span class="math scholmd-math-inline">\(T\cdot x = b\)</span> for <span class="math scholmd-math-inline">\(T\)</span> where: <span class="math scholmd-math-inline">\(T\)</span> is a lower triangular a full (all non-zero) diagonal exists, the column indices within a given row are sorted in increasing order (i.e., the last element of each row is the diagonal non-zero value), <span class="math scholmd-math-inline">\(x\)</span> is an array with unit-stride</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">for</span> (size_t i = <span class="dv">0</span>; i &lt; m; i++) {
+  <span class="dt">float</span> xi = x[i];
+  <span class="kw">for</span> (size_t k = ptr[i]; k &lt; ptr[i<span class="dv">+1</span>]<span class="dv">-1</span>; k++) {
+    xi -= val[k] * x[ind[k]];
+  }
+  xi /= val[ptr[i<span class="dv">+1</span>]<span class="dv">-1</span>];
+  x[i] = xi;
+}</code></pre>
+<h2 id="tridiagonal-matrix-solvers-notes-lapack-gtsv-operation">tridiagonal matrix solvers notes (<em>LAPACK</em> <strong>GTSV</strong> operation)</h2>
+<h3 id="introduction">Introduction</h3>
+<p>We wish to solve a system of n linear equations of the form <span class="math scholmd-math-inline">\(Ax = d\)</span>, where <span class="math scholmd-math-inline">\(A\)</span> is a tridiagonal matrix: 
+<span class="math scholmd-math-display" style="display: block;">\[
+\begin{equation*}
+\begin{aligned}
+\begin{pmatrix}
+   {b_1} &amp; {c_1} &amp; {   } &amp; {   } &amp; { 0 } \\
+   {a_2} &amp; {b_2} &amp; {c_2} &amp; {   } &amp; {   } \\
+   {   } &amp; {a_3} &amp; {b_3} &amp; \ddots &amp; {   } \\
+   {   } &amp; {   } &amp; \ddots &amp; \ddots &amp; {c_{n-1}}\\
+   { 0 } &amp; {   } &amp; {   } &amp; {a_n} &amp; {b_n}\\
+\end{pmatrix}
+=
+\begin{pmatrix}
+   {d_1 }  \\
+   {d_2 }  \\
+   {d_3 }  \\
+   \vdots   \\
+   {d_n }  \\
+\end{pmatrix}
+.
+\end{aligned}
+\end{equation*}
+\]</span>
+ Classical <a href="http://www.cfd-online.com/Wiki/Tridiagonal_matrix_algorithm_-_TDMA_(Thomas_algorithm)">Thomas algorithm</a> - a simplified form of Gaussian elimination - has asymptotic complexity <span class="math scholmd-math-inline">\(O(N)\)</span> instead of <span class="math scholmd-math-inline">\(O(N^3)\)</span> for Gaussian elimination. This algorithm is a base for sweep variant of solvers.</p>
+<p>Sweep algorithm doesn’t parallelize tridiagonal system solution, parallelism appear only during of large number of systems simultaneously. Cyclic reduction and parallel cyclic reduction from another hand parallelize tridiagonal system solution. Cyclic reduction has better asymptotic compxity <span class="math scholmd-math-inline">\(O(N)\)</span> compared to <span class="math scholmd-math-inline">\(O(\log(N))\)</span> for pcr, but it worse in terms of address divergence. An appropriate algorithm choice depends on the task.</p>
+<ul>
+<li>References
+<ul>
+<li><a href="http://mgarland.org/files/papers/nvr-2008-004.pdf">N. Bell and M. Garland. Efficient sparse matrix-vector multiplication on CUDA. NVIDIA Technical Report NVR-2008-004, December 2008.</a></li>
+<li><a href="http://sg.nvidia.com/docs/IO/77944/sc09-spmv-throughput.pdf">N. Bell and M. Garland. Implementing sparse matrix-vector multiplication on throughput-oriented processors. Proc. Supercomputing 2009, To appear, November 2009.</a></li>
+<li><a href="http://vuduc.org/pubs/choi2010-gpu-spmv.pdf">Jee Whan Choi, Amik Singh, and Richard W. Vuduc. Model-driven autotuning of sparse matrix-vector multiply on GPUs. In Proc. ACM SIGPLAN Symp. Principles and Practice of Parallel Programming (PPoPP), Bangalore, India, January 2010.</a></li>
+<li><a href="http://vuduc.org/pubs/vuduc2010-hotpar-cpu-v-gpu.pdf">Richard Vuduc, Aparna Chandramowlishwaran, Jee Whan Choi, Murat Efe Guney, and Aashay Shringarpure. On the limits of GPU acceleration. In Proc. USENIX Wkshp. Hot Topics in Parallelism (HotPar), Berkeley, CA, USA, June 2010.</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+      processClass: "math"
+    },
+    TeX: {
+        TagSide: "left",
+        TagIndent: "1.2em",
+        equationNumbers: {
+            autoNumber: "AMS"
+        },
+        Macros: {
+            ensuremath: ["#1",1],
+            textsf: ["\\mathsf{\\text{#1}}",1],
+            texttt: ["\\mathtt{\\text{#1}}",1]
+        }
+    },
+    "HTML-CSS": { 
+        scale: 100,
+        availableFonts: ["TeX"], 
+        preferredFont: "TeX",
+        webFont: "TeX",
+        imageFont: "TeX",
+        EqnChunk: 1000
+    }
+});
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full" type="text/javascript"></script>
+</div>
+</body>
+</html>
