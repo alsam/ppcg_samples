@@ -18,21 +18,22 @@ void ATL_dgemvN
 #pragma endscop
 }
 
-void matvecmul(int M, int N, double A[restrict const static M][N], double X[restrict const static M], double Y[restrict const static M])
+
+const int M = 8192;
+const int N = M;
+double AA[M][N];
+
+void matvecmul(int MM, int NN, double A[restrict const static MM][N], double X[restrict const static MM], double Y[restrict const static MM])
 {
 #pragma scop
-    for (int i=0; i < M; i++) {
+    for (int i=0; i < MM; i++) {
         Y[i] = 0.0;
-        for (int j=0; j < N; j++) {
+        for (int j=0; j < NN; j++) {
             Y[j] = Y[j] + A[i][j] * X[j];
         }
     }
 #pragma endscop
 }
-
-const int M = 8192;
-const int N = M;
-double AA[M][N];
 
 int main()
 {
